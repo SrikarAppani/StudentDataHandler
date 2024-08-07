@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .visibility{
+            display: none;
+        }
+    </style>
+    <title>Delete Details</title>
+</head>
+<body>
+    <form action="http://localhost:3000/deletestudent" method="post">
+        <h1 style="display: flex; justify-content: center; align-items: center;">Delete Details</h1><br>
+        <label for="rollNumberInput" class="form-label">Enter Roll Number:</label>
+        <input type="text" class="form-control" id="rollNumberInput" name="rollnumber" style="text-align: center; width: 400px;" placeholder="Ex: 21BD1A660A"><br>
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <button type="submit" id="submit" class="btn btn-outline-success">Remove</button>
+        </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

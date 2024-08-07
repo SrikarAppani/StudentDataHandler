@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .visibility{
+            display: none;
+        }
+        </style>
+    <script>
+        function fetchDetails() {
+            const visibility = document.getElementsByClassName("visibility");
+            const heading = document.getElementById("heading");
+            heading.style.display = "flex";
+            for(item of visibility) {
+                item.style.display = "block";
+            }
+
+            const rollNumber = document.getElementById('rollNumberInput').value.toUpperCase();
+            
+            if (!rollNumber) {
+                alert('Please enter a roll number');
+                return;
+            }
+            fetch(`/details?rollnumber=${rollNumber}`)
+            .then(response => response.json())
+            .then(data => {
+                    document.getElementById('studentName').innerText = data.name;
+                    document.getElementById('studentCourse').innerHTML = data.course;
+                    document.getElementById('defaultrollnum').value = data.rollnum;
+                    let dob = new Date(data.dob);
+                    document.getElementById('studentDOB').innerHTML = dob.toLocaleDateString();
+                    document.getElementById('studentAddress').innerHTML = data.address;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function enableName() {
+            const field = document.getElementById("updatedName");
+            const enableCheckbox = document.getElementById("CheckboxName");
+            field.disabled = !enableCheckbox.checked;
+            enableCheckbox.value = (enableCheckbox.value=="notchanged")? "changed":"notchanged";
+            
+            const btn = document.getElementById('updatesubmit')
+            const isChecked = document.getElementById('CheckboxName').checked || 
+            document.getElementById('CheckboxCourse').checked || 
+            document.getElementById('CheckboxDOB').checked || 
+            document.getElementById('CheckboxAddress').checked;
+            
+            btn.disabled = !isChecked;
+        }
+        
+        function enableCourse() {
+            const field = document.getElementById("updatedCourseSelect");
+            const enableCheckbox = document.getElementById("CheckboxCourse");
+            field.disabled = !enableCheckbox.checked;
+            enableCheckbox.value = (enableCheckbox.value=="notchanged")? "changed":"notchanged";
+            const btn = document.getElementById('updatesubmit')
+            const isChecked = document.getElementById('CheckboxName').checked || 
+            document.getElementById('CheckboxCourse').checked || 
+            document.getElementById('CheckboxDOB').checked || 
+            document.getElementById('CheckboxAddress').checked;
+            
+            btn.disabled = !isChecked;
+        }
+        
+        function enableDOB() {
+            const field = document.getElementById("updatedDOB");
+            const enableCheckbox = document.getElementById("CheckboxDOB");
+            field.disabled = !enableCheckbox.checked;
+            enableCheckbox.value = (enableCheckbox.value=="notchanged")? "changed":"notchanged";
+            
+            const btn = document.getElementById('updatesubmit')
+            const isChecked = document.getElementById('CheckboxName').checked || 
+            document.getElementById('CheckboxCourse').checked || 
+            document.getElementById('CheckboxDOB').checked || 
+            document.getElementById('CheckboxAddress').checked;
+            
+            btn.disabled = !isChecked;
+        }
+        
+        function enableAddress() {
+            const field = document.getElementById("updatedAddress");
+            const enableCheckbox = document.getElementById("CheckboxAddress");
+            field.disabled = !enableCheckbox.checked;
+            enableCheckbox.value = (enableCheckbox.value=="notchanged")? "changed":"notchanged";
+            
+            const btn = document.getElementById('updatesubmit')
+            const isChecked = document.getElementById('CheckboxName').checked || 
+                      document.getElementById('CheckboxCourse').checked || 
+                      document.getElementById('CheckboxDOB').checked || 
+                      document.getElementById('CheckboxAddress').checked;
+
+            btn.disabled = !isChecked;
+        }
+    </script>
+    <title>Update Details</title>
+</head>
+<body>
+    <div>
+        <h3 class="visibility" id="heading" style="justify-content: center; align-items: center;">Select fields to update</h3><br>
+        <form method="get">
+            <label for="rollNumberInput" class="form-label">Enter Roll Number:</label>
+            <input type="text" class="form-control" id="rollNumberInput" name="rollnumber" style="text-align: center; width: 400px;" placeholder="Ex: 21BD1A660A"><br>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <button type="button" id="submit" class="btn btn-outline-success" onclick="fetchDetails()">Submit</button>
+            </div>
+        </form>
+        <form class="visibility" action="http://localhost:3000/updatedetails" method="post">
+            <input style="display: none;" type="text" id="defaultrollnum" name="defaultrollnum">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="notchanged" id="CheckboxName" name="CheckboxName" onchange="enableName()">
+                <label class="form-check-label" for="CheckboxName">
+                    <p><strong>Name:</strong> <span id="studentName"></span></p>
+                    <input type="text" id="updatedName" class="form-control" style="width: 400px;" name="updatedName" disabled><br>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="notchanged" id="CheckboxCourse" name="CheckboxCourse" onchange="enableCourse()">
+                <label class="form-check-label" for="CheckboxCourse">
+                    <p><strong>Course:</strong> <span id="studentCourse"></span></p>
+                    <select class="form-select" id="updatedCourseSelect" name="updatedCourseSelect" style="width: 400px;" aria-label="Default select example" disabled>
+                        <option selected>--Select--</option>
+                        <option value="CSE">CSE</option>
+                        <option value="CSM">CSM</option>
+                        <option value="CSD">CSD</option>
+                        <option value="IT">IT</option>
+                    </select><br>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="notchanged" id="CheckboxDOB" name="CheckboxDOB" onchange="enableDOB()">
+                <label class="form-check-label" for="CheckboxDOB">
+                    <p><strong>Date of Birth:</strong> <span id="studentDOB"></span></p>
+                    <input type="text" id="updatedDOB" class="form-control" style="width: 400px;" name="updatedDOB" disabled><br>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="notchanged" id="CheckboxAddress" name="CheckboxAddress" onchange="enableAddress()">
+                <label class="form-check-label" for="CheckboxAddress">
+                    <p><strong>Address:</strong> <span id="studentAddress"></span></p>
+                    <input type="text" id="updatedAddress" class="form-control" style="width: 400px;" name="updatedAddress" disabled><br>
+                </label>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <button type="submit" id="updatesubmit" class="btn btn-outline-success" disabled>Update</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
